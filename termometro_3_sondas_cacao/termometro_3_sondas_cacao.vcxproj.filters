@@ -22,6 +22,7 @@
     <None Include="comunicaciones.ino" />
     <None Include="mediciones.ino" />
     <None Include="inicializa.ino" />
+    <None Include="digitales.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.termometro_3_sondas_cacao.vsarduino.h">

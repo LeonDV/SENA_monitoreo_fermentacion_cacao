@@ -90,6 +90,7 @@ typedef void *__builtin_va_list;
 
 #include "termometro_3_sondas_cacao.ino"
 #include "comunicaciones.ino"
+#include "digitales.ino"
 #include "inicializa.ino"
 #include "mediciones.ino"
 #endif
