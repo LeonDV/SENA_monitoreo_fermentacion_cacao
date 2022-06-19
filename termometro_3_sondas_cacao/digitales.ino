@@ -4,6 +4,7 @@ void encender_vcc_dev() {
 	delay(500);
 }
 
+//-- Activa el mosfet Q3 para proporcionar energia a los sensores de temperatura
 void apagar_vcc_dev() {
 	digitalWrite(PIN_DRIVE_VCC, HIGH);
 }

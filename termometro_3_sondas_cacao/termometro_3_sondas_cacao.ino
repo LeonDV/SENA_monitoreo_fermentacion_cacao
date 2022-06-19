@@ -25,20 +25,32 @@
 #include "LowPower.h"
 
 //-- DECLARACIONES
-OneWire DS18B20[] = { PIN_SENSOR1 ,PIN_SENSOR3 ,PIN_SENSOR3 };
-const int oneWireCont = sizeof(DS18B20) / sizeof(OneWire);
-DallasTemperature sensor[oneWireCont];
-DeviceAddress direccionSensor;
+OneWire oneWire_1(PIN_SENSOR1);
+OneWire oneWire_2(PIN_SENSOR2);
+OneWire oneWire_3(PIN_SENSOR3);
+
+DallasTemperature sensor_1(&oneWire_1);
+DallasTemperature sensor_2(&oneWire_2);
+DallasTemperature sensor_3(&oneWire_3);
+
+DeviceAddress dir_sensor1, dir_sensor2, dir_sensor3;
 
 void setup() {
 	Serial.begin(9600);
 	Serial.println("\nMedicion de temperatura V0.0.1 - 3 Sondas");
+	//-- Inicializa pin de control de voltaje de sensores
+	pinMode(PIN_DRIVE_VCC, OUTPUT);
+
+	//-- inicializa la red VCC administrada por  
+	encender_vcc_dev();
+	LowPower.powerDown(SLEEP_2S, ADC_OFF, BOD_OFF);
 
 	//-- inicializa las sondas de temperatura
-	
 	if (!inicializa_sonda1()) Serial.println(F("Error inicializando sonda 1"));
 	if (!inicializa_sonda2()) Serial.println(F("Error inicializando sonda 2"));
 	if (!inicializa_sonda3()) Serial.println(F("Error inicializando sonda 3"));
+
+
 
 }
 
