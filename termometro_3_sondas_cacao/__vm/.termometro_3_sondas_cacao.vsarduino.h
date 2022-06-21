@@ -93,5 +93,6 @@ typedef void *__builtin_va_list;
 #include "digitales.ino"
 #include "inicializa.ino"
 #include "mediciones.ino"
+#include "memoria.ino"
 #endif
 #endif
