@@ -20,7 +20,7 @@
 #include <EEPROM.h>
 
 //-- Libreria para bajo consumo de energia
-//#include "LowPower.h"
+#include "LowPower.h"
 
 //-- DECLARACIONES
 //-- Sesores de temperatura
@@ -37,9 +37,6 @@ DeviceAddress dir_sensor1, dir_sensor2, dir_sensor3;
 //-- LoRa
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
 
-
-
-
 void setup() {
   Serial.begin(9600);
   Serial.println("\nMedicion de temperatura V0.0.2 - 3 Sondas");
@@ -52,6 +49,7 @@ void setup() {
 
   //-- inicializa la red VCC administrada por uC
   encender_vcc_dev();
+  delay(200);
 
   //-- inicializa las sondas de temperatura
   if (!inicializa_sonda1()) Serial.println(F("Error inicializando sonda 1"));
@@ -61,62 +59,48 @@ void setup() {
   //-- Inicializa sistema de comunicaciones
   if (!inicializa_lora()) Serial.println(F("Error inicializando LoRa"));
 
-  millisMedidas = millis();
-
 }
-
 
 void loop() {
 
-  if (millis() - millisMedidas  > 1800000 || !primer_ingreso) {
-  //if (millis() - millisMedidas > 600000 || !primer_ingreso) {
-    encender_vcc_dev();
-    delay(200);
-
-    primer_ingreso = true;
-    float t1, t2, t3;
-    for (byte i = 0; i < INTENTOS_MEDICION; i++) {
-      t1 = tomar_medida(SONDA_1);
-      if (!errorMedidaSonda1) i = INTENTOS_MEDICION;
-    }
-    for (byte i = 0; i < INTENTOS_MEDICION; i++) {
-      t2 = tomar_medida(SONDA_2);
-      if (!errorMedidaSonda2) i = INTENTOS_MEDICION;
-    }
-    for (byte i = 0; i < INTENTOS_MEDICION; i++) {
-      t3 = tomar_medida(SONDA_3);
-      if (!errorMedidaSonda3) i = INTENTOS_MEDICION;
-    }
-
-    data = "{\"id\":\"";
-    data.concat(leerEEPROM(0));
-    data.concat("\",\"tipo\":\"TEMP_3\",\"b\":");
-    data.concat(medir_bateria());
-
-    if (!errorMedidaSonda1) {
-      data.concat(",\"t1\":");
-      data.concat(String(t1, 1));
-    }
-
-    if (!errorMedidaSonda2) {
-      data.concat(",\"t2\":");
-      data.concat(String(t2, 1));
-    }
-
-    if (!errorMedidaSonda3) {
-      data.concat(",\"t3\":");
-      data.concat(String(t3, 1));
-    }
-
-    data.concat("}");
-
-    //Serial.println(data);
-
-    enviarMensaje();
-
-    apagar_vcc_dev();
-    millisMedidas = millis();
-
+  float t1, t2, t3;
+  for (byte i = 0; i < INTENTOS_MEDICION; i++) {
+    t1 = tomar_medida(SONDA_1);
+    if (!errorMedidaSonda1) i = INTENTOS_MEDICION;
   }
+  for (byte i = 0; i < INTENTOS_MEDICION; i++) {
+    t2 = tomar_medida(SONDA_2);
+    if (!errorMedidaSonda2) i = INTENTOS_MEDICION;
+  }
+  for (byte i = 0; i < INTENTOS_MEDICION; i++) {
+    t3 = tomar_medida(SONDA_3);
+    if (!errorMedidaSonda3) i = INTENTOS_MEDICION;
+  }
+
+  data = "{\"id\":\"";
+  data.concat(leerEEPROM(0));
+  data.concat("\",\"tipo\":\"TEMP_3\",\"b\":");
+  data.concat(medir_bateria());
+
+  if (!errorMedidaSonda1) {
+    data.concat(",\"t1\":");
+    data.concat(String(t1, 1));
+  }
+
+  if (!errorMedidaSonda2) {
+    data.concat(",\"t2\":");
+    data.concat(String(t2, 1));
+  }
+
+  if (!errorMedidaSonda3) {
+    data.concat(",\"t3\":");
+    data.concat(String(t3, 1));
+  }
+
+  data.concat("}");
+
+  Serial.println(data);
+  enviarMensaje();
+  ahorro_energia_15min();
 
 }

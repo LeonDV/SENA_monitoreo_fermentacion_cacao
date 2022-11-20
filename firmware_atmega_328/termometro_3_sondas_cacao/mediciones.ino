@@ -1,3 +1,4 @@
+//-- realiza medicion de temperatura segun la sonda seleccionada 
 float tomar_medida(byte sonda) {
   float medida;
   if (sonda == 1) {
@@ -47,10 +48,8 @@ byte medir_bateria() {
   uint8_t high = ADCH;
   long result = (high << 8) | low;
   result = 1125300L / result; // Calcula Vcc (en mV); 1125300 = 1.1*1023*1000
-  //Serial.print(F("vBat: ")); Serial.print(result);
   if (result < B_MIN) result = B_MIN;
   if (result > B_MAX) result = B_MAX;
   byte bateria = map(result, B_MIN, B_MAX, 0, 100);
-  //Serial.print(F(" - bateria: ")); Serial.println(bateria);
-  return bateria; // Vcc en porcentaje 0 - 100% 3000 - 3300
+  return bateria;
 }

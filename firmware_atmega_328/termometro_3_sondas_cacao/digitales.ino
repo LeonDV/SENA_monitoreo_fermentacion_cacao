@@ -11,6 +11,7 @@ void apagar_vcc_dev() {
   digitalWrite(PIN_LED, LOW);
 }
 
+//-- indicador led
 void parpadeo(byte veces) {
   for (byte i = 0; i < veces; i++) {
     digitalWrite(PIN_LED, HIGH);
@@ -23,9 +24,12 @@ void parpadeo(byte veces) {
 //-- Apaga el circuito durante CICLOS_AHORRO_ENERGIA_8S x 8 segundos (aprox 15 min)
 void ahorro_energia_15min() {
   apagar_vcc_dev();
-  for (bool i = 0; i < CICLOS_AHORRO_ENERGIA_8S; i++) {
-    //LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+  delay(200);
+  for (byte i = 0; i < CICLOS_AHORRO_ENERGIA_8S; i++) {
+    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
     delay(100);
+    yield();
   }
   encender_vcc_dev();
+  delay(200);
 }
