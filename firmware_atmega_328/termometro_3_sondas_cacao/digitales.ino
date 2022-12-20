@@ -5,13 +5,13 @@ void encender_vcc_dev() {
   delay(1000);
 }
 
-//-- Activa el mosfet Q3 para proporcionar energia a los sensores de temperatura
+//-- Desactiva el mosfet Q3 para proporcionar energia a los sensores de temperatura
 void apagar_vcc_dev() {
   digitalWrite(PIN_DRIVE_VCC, HIGH);
   digitalWrite(PIN_LED, LOW);
 }
 
-//-- indicador led
+//-- Indicador led
 void parpadeo(byte veces) {
   for (byte i = 0; i < veces; i++) {
     digitalWrite(PIN_LED, HIGH);

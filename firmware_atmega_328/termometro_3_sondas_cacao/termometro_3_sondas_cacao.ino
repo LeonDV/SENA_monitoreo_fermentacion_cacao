@@ -4,7 +4,7 @@
   Author:      Leon David Valderrama
   Proyecto:    SGPS-9828-2022-PDF-20211214105708
   Nombre Proyecto: Sistema de monitoreo iot de curva de fermentacion del cacao para mejorar la calidad del proceso
-  Version:     V0.0.1
+  Version:     V0.0.2
 */
 #include "variables.h"
 
